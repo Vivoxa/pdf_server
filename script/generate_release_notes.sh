@@ -14,7 +14,7 @@ if [ "${dot_version:0:1}" == "v" ] ; then
   exit 1
 fi
 
-RELEASE_NOTES_FILE="pwpr_release_notes/v${dash_version}.html.md"
+RELEASE_NOTES_FILE="release_notes/v${dash_version}.html.md"
 
 renogen --format markdown v${dot_version} >> ${RELEASE_NOTES_FILE}
 
