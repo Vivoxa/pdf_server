@@ -3,9 +3,11 @@ services:
   app:
     image: pdf_service:latest
     command: bash -c "rackup config.ru -p 2030 -o '0.0.0.0'"
-    container_name: pdf_service
+    container_name: pdf_server
     tty: true
     stdin_open: true
+    volumes:
+      - ../pdf_server:/pdf_server
     ports:
       - "2030:2030"
     networks:

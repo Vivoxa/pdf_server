@@ -1,21 +1,35 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    byebug (9.1.0)
+    coderay (1.1.1)
+    method_source (0.8.2)
     mustermann (1.0.0)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-byebug (3.5.0)
+      byebug (~> 9.1)
+      pry (~> 0.10)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
+    renogen (1.2.0)
     sinatra (2.0.0)
       mustermann (~> 1.0)
       rack (~> 2.0)
       rack-protection (= 2.0.0)
       tilt (~> 2.0)
+    slop (3.6.0)
     tilt (2.0.8)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  pry-byebug
+  renogen (= 1.2.0)
   sinatra
 
 BUNDLED WITH

@@ -17,8 +17,8 @@ RUN apt-get update -qq && apt-get install bash && \
     sed -i 's/VERSUFF=-4.6/VERSUFF=-4.9/g' /tmp/pdftk-${PDFTK_VERSION}-dist/pdftk/Makefile.Debian && \
     cd /tmp/pdftk-${PDFTK_VERSION}-dist/pdftk && \
     make -f Makefile.Debian && \
-    make -f Makefile.Debian install && \
-    bundle install
+    make -f Makefile.Debian install
+RUN bundle install
 
 EXPOSE 2030
 
