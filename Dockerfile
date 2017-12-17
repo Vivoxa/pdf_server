@@ -32,6 +32,7 @@ RUN ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts \
 
 RUN bundle install --system
 
+ARG COMMAND
+ENV COMMAND ${COMMAND}
+CMD bash -c "${COMMAND}"
 EXPOSE 2030
-
-CMD bundle exec rackup config.ru -p 2030 -o '0.0.0.0'
