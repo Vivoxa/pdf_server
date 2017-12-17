@@ -1,0 +1,10 @@
+pwpr:
+  production:
+    server_url:
+    api_key:
+  development:
+    server_url: http://pwpr_app:3000/
+    api_key: 435jhadsfgkuy9863234ertfgjkljgkasdtigkkjfhjkdh
+  preprod:
+    server_url:
+    api_key:

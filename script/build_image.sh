@@ -18,7 +18,7 @@ set -e
       echo ''
       echo '****************************************************************'
       echo '          Building the command to run on the container'
-      command="RAILS_ENV=production rackup config.ru -p 2030 -o '0.0.0.0'"
+      command="RAILS_ENV=production bundle exec rackup config.ru -s Puma -p 2030 -o '0.0.0.0'"
       echo $command
       echo '***************************************************************'
       echo ''
@@ -48,7 +48,7 @@ set -e
       echo ''
       echo '********************************************************************************************************************************************'
       echo '             Building the command to run on the container'
-      command="RAILS_ENV=preprod rackup config.ru -p 2030 -o '0.0.0.0'"
+      command="RAILS_ENV=preprod bundle exec rackup config.ru -s Puma -p 2030 -o '0.0.0.0'"
       echo $command
       echo '********************************************************************************************************************************************'
       echo ''

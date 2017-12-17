@@ -1,0 +1,39 @@
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+default: &default
+  adapter: mysql2
+  pool: 5
+  timeout: 5000
+  username: root
+  password: admin
+
+development:
+  <<: *default
+  database: dev_pwpr_db
+  host: <%= ENV['DOCKER_DB_HOST'] || 'localhost' %>
+  port: 3306
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: test_pwpr_db
+
+preprod:
+  <<: *default
+  database: pre_pwpr_db
+  username: adm1n_pwpr
+  password: <%= ENV['PP_PWPR_DATABASE_PASSWORD'] %>
+  host: pre-pwpr-db.cd8c5ykxx371.eu-west-1.rds.amazonaws.com
+
+production:
+  <<: *default
+  database: prod_pwpr_db
+  username: adm1n_pwpr
+  password: <%= ENV['PROD_PWPR_DATABASE_PASSWORD'] %>
+  host: prod-pwpr.cxqoahvcv0qv.eu-west-1.rds.amazonaws.com

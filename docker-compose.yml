@@ -2,10 +2,18 @@ version: '2'
 services:
   app:
     image: pdf_service:latest
-    command: bash -c "rackup config.ru -p 2030 -o '0.0.0.0'"
+    command: bash -c "bundle && rackup config.ru -p 2030 -o '0.0.0.0'"
     container_name: pdf_server
     tty: true
     stdin_open: true
+    environment:
+      - PDFTK_LOCATION=/usr/bin/pdftk
+      - SECRET_KEY_BASE=0c64deb461266abb601d62b86780c92e8220f1e80fcaa2faa48a8005b7c4cf5dba4f921f5be0e288558a0c3f10ce23302bb54f593a19e7b6260cdd29ebb04760
+      - AWS_ACCESS_KEY_ID=AKIAIEYHGYE3AVY27YHQ
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_REGION=eu-west-1
+      - DOCKER_DB_HOST=pwpr_db_1
+      - PWPR_API_KEY=435jhadsfgkuy9863234ertfgjkljgkasdtigkkjfhjkdh
     volumes:
       - ../pdf_server:/pdf_server
     ports:
