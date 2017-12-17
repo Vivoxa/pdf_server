@@ -1,15 +1,8 @@
 class PwprClient
   BUSINESS_SHOW_ENDPOINT = "api/v1/businesses/".freeze
 
-  def initialise()
-
+  def initialise
   end
-
-  def get_business()
-    require 'pry'
-
-  end
-
 
   def get_request(url, id)
     uri = URI.parse("api/v1/businesses/#{id}")
