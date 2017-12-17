@@ -4,8 +4,9 @@ set -e
     if [[ $@ == *"--clean"* ]] ;then
       echo 'Cleaning...'
       docker-compose kill
-      docker-compose down -v
+      docker stop pdf_server
+      docker rm pdf_server
     fi
 
     docker-compose up -d
-		docker attach pdf_service
+		docker attach pdf_server

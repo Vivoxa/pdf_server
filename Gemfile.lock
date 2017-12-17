@@ -1,22 +1,72 @@
+GIT
+  remote: git@github.com:Vivoxa/aws_gateway.git
+  revision: 48743a87f5b5b18f5504f1c1399c2763395a852b
+  tag: v1.0.0
+  specs:
+    aws_gateway (1.0.0)
+      aws-sdk (~> 2)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    mustermann (1.0.0)
+    aws-sdk (2.10.104)
+      aws-sdk-resources (= 2.10.104)
+    aws-sdk-core (2.10.104)
+      aws-sigv4 (~> 1.0)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.10.104)
+      aws-sdk-core (= 2.10.104)
+    aws-sigv4 (1.0.2)
+    backports (3.10.3)
+    byebug (9.1.0)
+    cliver (0.3.2)
+    coderay (1.1.2)
+    jmespath (1.3.1)
+    json (2.1.0)
+    method_source (0.9.0)
+    multi_json (1.12.2)
+    mustermann (1.0.1)
+    pdf-forms (1.1.1)
+      cliver (~> 0.3.2)
+      safe_shell (>= 1.0.3, < 2.0)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    pry-byebug (3.5.1)
+      byebug (~> 9.1)
+      pry (~> 0.10)
+    puma (3.11.0)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
+    renogen (1.2.0)
+    safe_shell (1.1.0)
     sinatra (2.0.0)
       mustermann (~> 1.0)
       rack (~> 2.0)
       rack-protection (= 2.0.0)
       tilt (~> 2.0)
+    sinatra-contrib (2.0.0)
+      backports (>= 2.0)
+      multi_json
+      mustermann (~> 1.0)
+      rack-protection (= 2.0.0)
+      sinatra (= 2.0.0)
+      tilt (>= 1.3, < 3)
     tilt (2.0.8)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws_gateway!
+  json
+  pdf-forms
+  pry-byebug
+  puma
+  renogen (= 1.2.0)
   sinatra
+  sinatra-contrib
 
 BUNDLED WITH
-   1.15.3
+   1.16.0

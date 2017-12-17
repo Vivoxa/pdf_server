@@ -1,3 +1,4 @@
 $: << File.dirname(__FILE__)
-require 'route_handlers/pdf_server'
+#\ -s puma
+require 'load_dependencies'
 run PdfServer.new
