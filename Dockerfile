@@ -1,28 +1,3 @@
-#FROM ruby:2.3.0
-#
-#ARG APP_DIR
-#
-#ENV APP_DIR $APP_DIR
-#
-#RUN apt-get update -qq --virtual build-dependencies build-essential\
-#&& apt-get install -y build-essential libpq-dev\
-#&& apt-get install pdftk \
-#&& apt-get clean \
-#&& mkdir /$APP_DIR
-#
-#WORKDIR /$APP_DIR
-#COPY . /$APP_DIR
-#RUN mkdir /root/.ssh/
-#RUN ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
-#COPY id_rsa /root/.ssh/id_rsa
-#RUN chown 0400 /root/.ssh/id_rsa
-#
-#RUN bundle install --system
-#
-#EXPOSE 2030
-#
-#CMD rackup config.ru -p 2030 -o '0.0.0.0'
-
 FROM alpine:3.7
 
 ARG APP_DIR
