@@ -1,21 +1,21 @@
 GIT
   remote: git@github.com:Vivoxa/aws_gateway.git
-  revision: 48743a87f5b5b18f5504f1c1399c2763395a852b
-  tag: v1.0.0
+  revision: 4321c7a75202efb45d718c79b4eeda3776feeb43
+  tag: v0.0.9
   specs:
-    aws_gateway (1.0.0)
+    aws_gateway (0.0.5)
       aws-sdk (~> 2)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    aws-sdk (2.10.104)
-      aws-sdk-resources (= 2.10.104)
-    aws-sdk-core (2.10.104)
+    aws-sdk (2.10.106)
+      aws-sdk-resources (= 2.10.106)
+    aws-sdk-core (2.10.106)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.10.104)
-      aws-sdk-core (= 2.10.104)
+    aws-sdk-resources (2.10.106)
+      aws-sdk-core (= 2.10.106)
     aws-sigv4 (1.0.2)
     backports (3.10.3)
     byebug (9.1.0)

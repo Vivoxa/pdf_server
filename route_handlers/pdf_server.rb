@@ -1,28 +1,19 @@
+# frozen_string_literal: true
+
+# facilitates pdf generation and manipulation
 class PdfServer < Sinatra::Base
   register Sinatra::Namespace
 
-  SERVER_TMP_FILE_DIR = 'public'.freeze
-  DEFAULT_FILE_EXT = 'pdf'.freeze
-  TMP_FILEPATH = 'public/filetest.pdf'.freeze
+  SERVER_TMP_FILE_DIR = 'temp'
+  DEFAULT_FILE_EXT = 'pdf'
   PDFTK_LIB_LOCATION = ENV.fetch('PDFTK_LOCATION', '/usr/bin/pdftk')
+  APP_NAME = 'pwpr_app'
 
   use Rack::Auth::Basic, "Restricted Area" do |app_name, api_key|
-    app_name == 'pwpr_app' and api_key == ENV.fetch('PWPR_API_KEY')
+    app_name == APP_NAME and api_key == ENV.fetch('PWPR_API_KEY')
   end
 
   namespace '/api/v1' do
-
-    get '/business/:id' do |id|
-      require 'pry'
-      uri = URI.parse("http://pwpr_app:3000/api/v1/businesses/#{id}")
-      Net::HTTP.start(uri.host, uri.port, params) do |http|
-        request = Net::HTTP::Get.new uri.request_uri
-        request.basic_auth 'pdf_server', '435jhadsfgkuy9863234ertfgjkljgkasdtigkkjfhjkdh'
-        response = http.request request # Net::HTTPResponse object
-        puts response
-        puts response.body
-      end
-    end
 
     post '/create/pdf/' do
       values = JSON.parse(params['values'])
@@ -31,23 +22,26 @@ class PdfServer < Sinatra::Base
       report_type = params['report_type']
 
       file_location = tmp_filename(year, business_npwd, report_type)
-      pdftk.fill_form(s3_helper.get_default_template(report_type), file_location, values)
 
-      s3_helper.upload_to_S3(year, business_npwd, report_type, file_location)
-      cleanup
+      result = s3_report_helper.get_default_template(report_type)
+      pdftk.fill_form(result[:response_body], file_location, values)
+
+      s3_report_helper.upload_to_S3(year, business_npwd, report_type, file_location)
+      cleanup(file_location)
     end
 
-    get '/download/:filename' do |filename|
-      'Downloads'
-      send_file "public/#{filename}", :filename => filename, :type => 'Application/octet-stream'
+    get '/download/:report_name/:year/:npwd' do |npwd, year, report_name|
+      resp = s3_report_helper.get_report(year, npwd, report_name)
+      send_file resp[:target], :filename => resp[:target], :type => 'Application/octet-stream'
     end
 
     get '/form_fields/:report_type' do |report_type|
       content_type :json
-      template = s3_helper.get_default_template(report_type)
+      result = s3_report_helper.get_default_template(report_type)
 
-      pdf_fields = pdftk.get_fields(template)
+      pdf_fields = pdftk.get_fields(result[:response_body])
       json_fields = extract_fields(pdf_fields).to_json
+      cleanup(result[:target])
       if json_fields
         status 200
         json_fields
@@ -88,14 +82,14 @@ class PdfServer < Sinatra::Base
     fields
   end
 
-  def cleanup
-    FileUtils.rm [TMP_FILEPATH], force: true
+  def cleanup(filename)
+    FileUtils.rm [filename], force: true
   end
 
   private
 
-  def s3_helper()
-    @s3_helper ||= S3Helper.new
+  def s3_report_helper
+    @s3_report_helper ||= S3ReportHelper.new(SERVER_TMP_FILE_DIR)
   end
 
   def tmp_filename(year, business_npwd, report_type, ext = DEFAULT_FILE_EXT)
