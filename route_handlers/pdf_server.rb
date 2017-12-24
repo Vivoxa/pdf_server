@@ -22,15 +22,20 @@ class PdfServer < Sinatra::Base
       report_type = params['report_type']
 
       file_location = tmp_filename(year, business_npwd, report_type)
+      result = nil
 
       begin
-      result = s3_report_helper.get_default_template(report_type)
-
-      pdftk.fill_form(result[:response_body], file_location, values)
-
-      s3_report_helper.upload_to_S3(year, business_npwd, report_type, file_location)
+        result = s3_report_helper.get_default_template(report_type)
       rescue
-        status 422
+        halt 404
+      end
+
+      begin
+        pdftk.fill_form(result[:response_body], file_location, values)
+        s3_report_helper.upload_to_S3(year, business_npwd, report_type, file_location)
+      rescue
+        cleanup(file_location)
+        halt 422
       end
       cleanup(file_location)
     end

@@ -87,12 +87,26 @@ RSpec.describe PdfServer do
 
       expect(dummy_report_helper).to have_received(:upload_to_S3).with(year, npwd, report_type, file_location)
     end
-    context 'when an error occurs' do
-      it 'expects a 422 status code' do
+    context 'when the report template cannot be found' do
+      it 'expects a 404 status code' do
         allow(S3ReportHelper).to receive(:new).and_return(dummy_report_helper)
         allow(PdfForms).to receive(:new).and_return(dummy_pdftk)
         allow(dummy_report_helper).to receive(:get_default_template).and_raise StandardError
         allow(dummy_pdftk).to receive(:fill_form)
+        allow(dummy_report_helper).to receive(:upload_to_S3)
+
+        post '/api/v1/create/pdf/', params
+
+        expect(last_response.status).to eq 404
+      end
+    end
+
+    context 'when the pdf form fill fails' do
+      it 'expects a 422 status code' do
+        allow(S3ReportHelper).to receive(:new).and_return(dummy_report_helper)
+        allow(PdfForms).to receive(:new).and_return(dummy_pdftk)
+        allow(dummy_report_helper).to receive(:get_default_template)
+        allow(dummy_pdftk).to receive(:fill_form).and_raise StandardError
         allow(dummy_report_helper).to receive(:upload_to_S3)
 
         post '/api/v1/create/pdf/', params
