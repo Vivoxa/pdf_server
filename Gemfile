@@ -13,3 +13,8 @@ group :development do
   gem 'pry-byebug'
   gem 'renogen', '1.2.0', require: false
 end
+
+group :test do
+  gem 'rspec'
+  gem 'rack-test'
+end

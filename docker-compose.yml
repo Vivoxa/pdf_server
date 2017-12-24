@@ -2,7 +2,7 @@ version: '2'
 services:
   app:
     image: pdf_service:latest
-    command: bash -c "bundle exec rackup config.ru -p 2030 -o '0.0.0.0'"
+    command: bash -c "bundle && bundle exec rackup config.ru -p 2030 -o '0.0.0.0'"
     container_name: pdf_server
     tty: true
     stdin_open: true

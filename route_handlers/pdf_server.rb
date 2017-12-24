@@ -24,15 +24,17 @@ class PdfServer < Sinatra::Base
       file_location = tmp_filename(year, business_npwd, report_type)
 
       result = s3_report_helper.get_default_template(report_type)
+
       pdftk.fill_form(result[:response_body], file_location, values)
 
       s3_report_helper.upload_to_S3(year, business_npwd, report_type, file_location)
+
       cleanup(file_location)
     end
 
     get '/download/:report_name/:year/:npwd' do |npwd, year, report_name|
       resp = s3_report_helper.get_report(year, npwd, report_name)
-      send_file resp[:target], :filename => resp[:target], :type => 'Application/octet-stream'
+      send_file resp[:target], filename: resp[:target], type: 'Application/octet-stream'
     end
 
     get '/form_fields/:report_type' do |report_type|
