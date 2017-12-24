@@ -23,12 +23,15 @@ class PdfServer < Sinatra::Base
 
       file_location = tmp_filename(year, business_npwd, report_type)
 
+      begin
       result = s3_report_helper.get_default_template(report_type)
 
       pdftk.fill_form(result[:response_body], file_location, values)
 
       s3_report_helper.upload_to_S3(year, business_npwd, report_type, file_location)
-
+      rescue
+        status 422
+      end
       cleanup(file_location)
     end
 

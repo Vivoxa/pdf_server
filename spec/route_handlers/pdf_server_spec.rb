@@ -87,5 +87,18 @@ RSpec.describe PdfServer do
 
       expect(dummy_report_helper).to have_received(:upload_to_S3).with(year, npwd, report_type, file_location)
     end
+    context 'when an error occurs' do
+      it 'expects a 422 status code' do
+        allow(S3ReportHelper).to receive(:new).and_return(dummy_report_helper)
+        allow(PdfForms).to receive(:new).and_return(dummy_pdftk)
+        allow(dummy_report_helper).to receive(:get_default_template).and_raise StandardError
+        allow(dummy_pdftk).to receive(:fill_form)
+        allow(dummy_report_helper).to receive(:upload_to_S3)
+
+        post '/api/v1/create/pdf/', params
+
+        expect(last_response.status).to eq 422
+      end
+    end
   end
 end
