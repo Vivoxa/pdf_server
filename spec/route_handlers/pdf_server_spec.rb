@@ -5,7 +5,7 @@ RSpec.describe PdfServer do
   include AuthHelper
   before do
     http_login
-    allow(S3ReportHelper).to receive(:new).and_return(dummy_report_helper)
+    allow(AwsGateway::S3ReportHelper).to receive(:new).and_return(dummy_report_helper)
     allow(PdfForms).to receive(:new).and_return(dummy_pdftk)
     allow(dummy_report_helper).to receive(:get_default_template).and_return(response)
     allow(dummy_report_helper).to receive(:upload_to_S3)

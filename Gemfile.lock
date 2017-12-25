@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:Vivoxa/aws_gateway.git
-  revision: 1e149262a3e1854cfd4f2d2eb413859be087ff40
+  revision: 0f7630883d159072bcd1196ef55f27b0250c4f10
   tag: v1.0.0
   specs:
     aws_gateway (1.0.0)

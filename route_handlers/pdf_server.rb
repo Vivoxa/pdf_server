@@ -104,7 +104,7 @@ class PdfServer < Sinatra::Base
   private
 
   def s3_report_helper
-    @s3_report_helper ||= S3ReportHelper.new(SERVER_TMP_FILE_DIR)
+    @s3_report_helper ||= AwsGateway::S3ReportHelper.new(SERVER_TMP_FILE_DIR)
   end
 
   def tmp_filename(year, business_npwd, report_type, ext = DEFAULT_FILE_EXT)
