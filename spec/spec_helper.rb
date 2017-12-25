@@ -14,6 +14,7 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'rack/test'
+require 'pry'
 
 ENV['RACK_ENV'] = 'test'
 require_relative '../load_dependencies'

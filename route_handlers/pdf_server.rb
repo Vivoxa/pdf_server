@@ -23,7 +23,6 @@ class PdfServer < Sinatra::Base
 
       file_location = tmp_filename(year, business_npwd, report_type)
       result = nil
-
       begin
         result = s3_report_helper.get_default_template(report_type)
       rescue
@@ -42,7 +41,12 @@ class PdfServer < Sinatra::Base
 
     get '/download/:report_name/:year/:npwd' do |npwd, year, report_name|
       resp = s3_report_helper.get_report(year, npwd, report_name)
-      send_file resp[:target], filename: resp[:target], type: 'Application/octet-stream'
+      halt 404 unless resp
+      begin
+        send_file resp[:target], filename: resp[:target], type: 'Application/octet-stream'
+      rescue
+        halt 404
+      end
     end
 
     get '/form_fields/:report_type' do |report_type|
