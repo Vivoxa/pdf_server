@@ -9,7 +9,7 @@ class PdfServer < Sinatra::Base
   PDFTK_LIB_LOCATION = ENV.fetch('PDFTK_LOCATION', '/usr/bin/pdftk')
   APP_NAME = 'pwpr_app'
 
-  use Rack::Auth::Basic, "Restricted Area" do |app_name, api_key|
+  use Rack::Auth::Basic, 'Restricted Area' do |app_name, api_key|
     app_name == APP_NAME and api_key == ENV.fetch('PWPR_API_KEY')
   end
 
@@ -53,8 +53,9 @@ class PdfServer < Sinatra::Base
       content_type :json
       result = s3_report_helper.get_default_template(report_type)
 
-      pdf_fields = pdftk.get_fields(result[:response_body])
-      json_fields = extract_fields(pdf_fields).to_json
+      pdf_fields = pdftk.get_fields(result[:response_body]) if result[:response_body]
+      json_fields = extract_fields(pdf_fields).to_json if pdf_fields&.any?
+
       cleanup(result[:target])
       if json_fields
         status 200
@@ -72,7 +73,7 @@ class PdfServer < Sinatra::Base
   def extract_fields(pdftk_fields)
     fields = {}
     pdftk_fields.each do |field|
-      if (field.type == "Button")
+      if (field.type == 'Button')
         fields[field.name] = {
             name: field.name,
             type: field.type,
@@ -82,7 +83,7 @@ class PdfServer < Sinatra::Base
             options: field.options
         }
       end
-      if (field.type == "Text")
+      if (field.type == 'Text')
         fields[field.name] = {
             name: field.name,
             type: field.type,

@@ -20,10 +20,6 @@ ENV['RACK_ENV'] = 'test'
 require_relative '../load_dependencies'
 require_relative './support/auth_helper'
 
-def app
-  PdfServer.new
-end
-
 RSpec.configure do |config|
   config.include Rack::Test::Methods
 

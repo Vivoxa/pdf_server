@@ -11,6 +11,11 @@ RSpec.describe PdfServer do
     allow(dummy_report_helper).to receive(:upload_to_S3)
   end
 
+  def app
+    pdf_server
+  end
+
+  # dummy class
   class DummyReportHelper
 
     def get_default_template(report_type)
@@ -24,14 +29,16 @@ RSpec.describe PdfServer do
     end
   end
 
+  # dummy class
   class DummyPdftk
     def get_fields(report)
     end
+
     def fill_form(report_type, file_location, values)
     end
   end
 
-  subject(:pdf_server) { described_class.new }
+  subject(:pdf_server) { described_class.new! }
   let(:dummy_report_helper) { DummyReportHelper.new }
   let(:dummy_pdftk) { DummyPdftk.new }
   let(:year) { '2017' }
@@ -125,6 +132,51 @@ RSpec.describe PdfServer do
         response = { response_body: 'sagag', target: 'temp/out.txt' }
         allow(dummy_report_helper).to receive(:get_report).and_return(response)
         get 'api/v1/download/report_name/year/npwd'
+        expect(last_response.status).to eq 200
+        `rm temp/out.txt`
+      end
+    end
+  end
+  describe '#form_fields' do
+    let(:fields) do
+      {
+        field1: {
+          name: 'field_name1',
+          type: 'Button',
+          flags: 'flag1',
+          justification: 'left',
+          value: 'field.value',
+          options: { a: 'b' }
+        },
+        field2: {
+            name: 'field_name1',
+            type: 'Text',
+            flags: 'flag1',
+            justification: 'left',
+            value: 'field.value',
+            options: { a: 'b' }
+        }
+      }
+
+    end
+    context 'when the report does not exist' do
+      it 'expects a 404 not found status code' do
+        allow(dummy_pdftk).to receive(:get_fields).and_return({})
+        get 'api/v1/form_fields/report_name'
+        expect(last_response.status).to eq 404
+      end
+    end
+
+    context 'when file does exist' do
+      it 'expects a 200 status code' do
+        File.open('temp/out.txt', 'w+') do |f|
+          f.write('data_you_want_to_write')
+        end
+        response = {}
+        allow(dummy_pdftk).to receive(:get_fields).and_return(fields)
+
+        allow_any_instance_of(PdfServer).to receive(:extract_fields).and_return(fields)
+        get 'api/v1/form_fields/report_name'
         expect(last_response.status).to eq 200
         `rm temp/out.txt`
       end
